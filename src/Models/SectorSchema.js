@@ -18,6 +18,12 @@ const sectorSchema = new mongoose.Schema({
     type: Date,
     require: [true],
   },
+  status: {
+    type: String,
+    enum: ['ativado','desativado'],
+    require: [true],
+    default: 'ativado',
+  },
 });
 
 module.exports = mongoose.model('Sector', sectorSchema);
