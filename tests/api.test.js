@@ -174,6 +174,28 @@ describe('Sample Test', () => {
     done();
   });
 
+  it('Deactivate sector', async (done) => {
+    
+    const res = await request(app)
+    .put(`/sector/deactivate/${id}`)
+    .set('x-access-token', token);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.name).toBe(sector.name);
+    expect(res.body.description).toBe(sector.description);
+    expect(res.body.status).toBe('desativado');
+    done();
+  });
+
+  it('Deactivate with invalid id', async (done) => {
+    const res = await request(app)
+    .put(`/sector/deactivate/123abc`)
+    .set('x-access-token', token);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.err).toBe('invalid id');
+    done();
+  });
+
   it('Delete sector', async (done) => {
     const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
