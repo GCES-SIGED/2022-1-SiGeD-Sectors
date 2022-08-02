@@ -199,6 +199,20 @@ describe('Sample Test', () => {
     done();
   });
 
+  it('Get newest four active sectors', async (done) => {
+
+    const res = await request(app).get('/sector/newest-four-active').set('x-access-token', token);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(4);
+
+    expect(res.body[0].description).toBe(sector5.description);
+    expect(res.body[0].name).toBe(sector5.name);
+
+    expect(res.body[res.body.length - 1].description).toBe(sector2.description);
+    expect(res.body[res.body.length - 1].name).toBe(sector2.name);
+    done();
+  });
+
   it('Delete sector', async (done) => {
     const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
