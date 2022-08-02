@@ -175,7 +175,10 @@ describe('Sample Test', () => {
   });
 
   it('Deactivate sector', async (done) => {
-    
+    const sector = {
+      name: "fisioterapia",
+      description: "setor de fisioterapia"
+    };
     const res = await request(app)
     .put(`/sector/deactivate/${id}`)
     .set('x-access-token', token);
