@@ -94,6 +94,14 @@ const newestFourSectorsGet = async (req, res) => {
   return res.status(200).json(sectors);
 };
 
+const newestFourActiveSectorsGet = async (req, res) => {
+  let mongoQuery = { status: 'ativado' };
+  const sectors = await Sector.find(mongoQuery).limit(4).sort({ createdAt: -1 });
+
+  return res.status(200).json(sectors);
+};
+
+
 module.exports = {
-  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet, sectorDeactivate,
+  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet, sectorDeactivate, newestFourActiveSectorsGet,
 };
