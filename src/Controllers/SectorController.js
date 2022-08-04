@@ -34,6 +34,7 @@ const sectorCreate = async (req, res) => {
       description,
       createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
       updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      status: "ativado",
     });
     return res.status(200).json(newSector);
   } catch (error) {
