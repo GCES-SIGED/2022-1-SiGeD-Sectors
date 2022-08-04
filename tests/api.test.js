@@ -205,11 +205,13 @@ describe('Sample Test', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBe(4);
 
-    expect(res.body[0].description).toBe(sector5.description);
-    expect(res.body[0].name).toBe(sector5.name);
+    expect(res.body[0].description).toBe(sector2.description);
+    expect(res.body[0].name).toBe(sector2.name);
+    expect(res.body[0].status).toBe("ativado");
 
-    expect(res.body[res.body.length - 1].description).toBe(sector2.description);
-    expect(res.body[res.body.length - 1].name).toBe(sector2.name);
+    expect(res.body[res.body.length - 1].description).toBe(sector3.description);
+    expect(res.body[res.body.length - 1].name).toBe(sector3.name);
+    expect(res.body[res.body.length - 1].status).toBe("ativado");
     done();
   });
 

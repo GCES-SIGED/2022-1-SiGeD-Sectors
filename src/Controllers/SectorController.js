@@ -34,7 +34,7 @@ const sectorCreate = async (req, res) => {
       description,
       createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
       updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-      status: "ativado",
+      status: 'ativado',
     });
     return res.status(200).json(newSector);
   } catch (error) {
@@ -96,12 +96,10 @@ const newestFourSectorsGet = async (req, res) => {
 };
 
 const newestFourActiveSectorsGet = async (req, res) => {
-  let mongoQuery = { status: 'ativado' };
-  const sectors = await Sector.find(mongoQuery).limit(4).sort({ createdAt: -1 });
+  const sectors = await Sector.find({ status: "ativado" }).limit(4).sort({ createdAt: -1 });
 
   return res.status(200).json(sectors);
 };
-
 
 module.exports = {
   sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet, sectorDeactivate, newestFourActiveSectorsGet,

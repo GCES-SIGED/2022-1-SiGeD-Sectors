@@ -20,7 +20,6 @@ const sectorSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['ativado','desativado'],
     require: [true],
     default: 'ativado',
   },
