@@ -64,6 +64,10 @@ Para receber os dados de um setor específico utilizando o `id`.
 
 **GET: `/sector/newest-four`**
 
+Para receber os dados dos últimos quatro setores adicionados, incluindo desativados.
+
+**GET: `/sector/newest-four-active`**
+
 Para receber os dados dos últimos quatro setores adicionados.
 
 **POST: `/sector/create`**
@@ -87,6 +91,10 @@ Para atualizar os dados do setor, envie os dados atualizados seguindo o padrão:
     "description": "Descrição do Setor Atualizada",
 }
 ```
+
+**PUT: `/sector/deactivate/:id`**
+
+Para desativar um setor pelo `id`.
 
 **DELETE: `/sector/delete/:id`**
 
