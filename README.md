@@ -38,6 +38,20 @@ docker-compose up
 ```
 A API estará rodando na [porta 3004](http://localhost:3004).
 
+## Seeders
+
+Para popular a base de dados (após subir o docker-compose) com dados exemplos use os seguintes comandos:
+
+```bash
+docker exec -it backend_sector bash -c "node src/seeders/seedSector.js"
+```
+
+Para resetar o banco use o comando:
+
+```bash
+docker-compose rm
+```
+
 ## Rotas
 
 **GET: `/sector/`**
@@ -49,6 +63,10 @@ Para receber os dados dos setores.
 Para receber os dados de um setor específico utilizando o `id`.
 
 **GET: `/sector/newest-four`**
+
+Para receber os dados dos últimos quatro setores adicionados, incluindo desativados.
+
+**GET: `/sector/newest-four-active`**
 
 Para receber os dados dos últimos quatro setores adicionados.
 
@@ -73,6 +91,10 @@ Para atualizar os dados do setor, envie os dados atualizados seguindo o padrão:
     "description": "Descrição do Setor Atualizada",
 }
 ```
+
+**PUT: `/sector/deactivate/:id`**
+
+Para desativar um setor pelo `id`.
 
 **DELETE: `/sector/delete/:id`**
 

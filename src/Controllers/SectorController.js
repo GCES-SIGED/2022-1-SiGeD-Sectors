@@ -34,6 +34,7 @@ const sectorCreate = async (req, res) => {
       description,
       createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
       updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+      status: 'ativado',
     });
     return res.status(200).json(newSector);
   } catch (error) {
@@ -74,12 +75,32 @@ const sectorDelete = async (req, res) => {
   }
 };
 
+const sectorDeactivate = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
+      status: 'desativado',
+      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
+    }, { new: true }, (sector) => sector);
+    return res.json(updateStatus);
+  } catch {
+    return res.status(400).json({ err: 'invalid id' });
+  }
+};
+
 const newestFourSectorsGet = async (req, res) => {
   const sectors = await Sector.find().limit(4).sort({ createdAt: -1 });
 
   return res.status(200).json(sectors);
 };
 
+const newestFourActiveSectorsGet = async (req, res) => {
+  const sectors = await Sector.find({ status: "ativado" }).limit(4).sort({ createdAt: -1 });
+
+  return res.status(200).json(sectors);
+};
+
 module.exports = {
-  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet,
+  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet, sectorDeactivate, newestFourActiveSectorsGet,
 };

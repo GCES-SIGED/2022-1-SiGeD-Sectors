@@ -174,6 +174,47 @@ describe('Sample Test', () => {
     done();
   });
 
+  it('Deactivate sector', async (done) => {
+    const sector = {
+      name: "fisioterapia",
+      description: "setor de fisioterapia"
+    };
+    const res = await request(app)
+    .put(`/sector/deactivate/${id}`)
+    .set('x-access-token', token);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.name).toBe(sector.name);
+    expect(res.body.description).toBe(sector.description);
+    expect(res.body.status).toBe('desativado');
+    done();
+  });
+
+  it('Deactivate with invalid id', async (done) => {
+    const res = await request(app)
+    .put(`/sector/deactivate/123abc`)
+    .set('x-access-token', token);
+    expect(res.statusCode).toBe(400);
+    expect(res.body.err).toBe('invalid id');
+    done();
+  });
+
+  it('Get newest four active sectors', async (done) => {
+
+    const res = await request(app).get('/sector/newest-four-active').set('x-access-token', token);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBe(4);
+
+    expect(res.body[0].description).toBe(sector2.description);
+    expect(res.body[0].name).toBe(sector2.name);
+    expect(res.body[0].status).toBe("ativado");
+
+    expect(res.body[res.body.length - 1].description).toBe(sector3.description);
+    expect(res.body[res.body.length - 1].name).toBe(sector3.name);
+    expect(res.body[res.body.length - 1].status).toBe("ativado");
+    done();
+  });
+
   it('Delete sector', async (done) => {
     const res = await request(app).delete(`/sector/delete/${id}`).set('x-access-token', token);
     expect(res.statusCode).toBe(200);
