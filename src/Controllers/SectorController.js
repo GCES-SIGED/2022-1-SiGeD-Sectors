@@ -8,6 +8,12 @@ const sectorGet = async (req, res) => {
   return res.status(200).json(sectors);
 };
 
+const sectorGetActive = async (req, res) => {
+  const sectors = await Sector.find({ status: "ativado" });
+
+  return res.status(200).json(sectors);
+};
+
 const sectorId = async (req, res) => {
   const { id } = req.params;
 
