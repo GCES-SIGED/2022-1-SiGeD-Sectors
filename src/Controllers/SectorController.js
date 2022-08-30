@@ -108,5 +108,5 @@ const newestFourActiveSectorsGet = async (req, res) => {
 };
 
 module.exports = {
-  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet, sectorDeactivate, newestFourActiveSectorsGet,
+  sectorGet, sectorId, sectorCreate, sectorUpdate, sectorDelete, newestFourSectorsGet, sectorDeactivate, newestFourActiveSectorsGet, sectorGetActive,
 };
