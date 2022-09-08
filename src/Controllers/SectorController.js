@@ -1,15 +1,15 @@
 const moment = require('moment-timezone');
 const Sector = require('../Models/SectorSchema');
-const { validate } = require('../Utils/validate');
+const { validateNameDescription } = require('../Utils/validate');
 
-const sectorGet = async (req, res) => {
+const sectorGet = async (_req, res) => {
   const sectors = await Sector.find();
 
   return res.status(200).json(sectors);
 };
 
-const sectorGetActive = async (req, res) => {
-  const sectors = await Sector.find({ status: "ativado" });
+const sectorGetActive = async (_req, res) => {
+  const sectors = await Sector.find({ status: "ativado" }); 
 
   return res.status(200).json(sectors);
 };
@@ -20,31 +20,28 @@ const sectorId = async (req, res) => {
   try {
     const sector = await Sector.findOne({ _id: id });
     return res.status(200).json(sector);
-  } catch {
-    return res.status(400).json({ err: 'Invalid ID' });
+  } catch (error) {
+    return res.status(400).json({ error: error });
   }
 };
 
 const sectorCreate = async (req, res) => {
   const { name, description } = req.body;
-
-  const validFields = validate(name, description);
-
-  if (validFields.length) {
-    return res.status(400).json({ status: validFields });
-  }
-
   try {
-    const newSector = await Sector.create({
-      name,
-      description,
-      createdAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-      status: 'ativado',
-    });
+    validateNameDescription(name, description);
+    const dateNow = moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(); 
+    const status = 'ativado'
+    const sectorInfo = {
+      name: name,
+      description: description,
+      createdAt: dateNow,
+      updatedAt: dateNow,
+      status: status,
+    } 
+    const newSector = await Sector.create(sectorInfo);
     return res.status(200).json(newSector);
   } catch (error) {
-    return res.status(400).json({ error: error.code });
+    return res.status(400).json({ error: error });
   }
 };
 
@@ -52,20 +49,18 @@ const sectorUpdate = async (req, res) => {
   const { id } = req.params;
   const { name, description } = req.body;
 
-  const validFields = validate(name, description);
-
-  if (validFields.length) {
-    return res.status(400).json({ status: validFields });
-  }
   try {
-    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
-      name,
-      description,
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    }, { new: true }, (user) => user);
+    validateNameDescription(name, description);
+    const dateNow = moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(); 
+    const sectorInfo = {
+      name: name,
+      description: description,
+      updatedAt: dateNow,
+    } 
+    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {sectorInfo}, { new: true }, (user) => user);
     return res.json(updateStatus);
-  } catch {
-    return res.status(400).json({ err: 'invalid id' });
+  } catch (error) {
+    return res.status(400).json({ error: error });
   }
 };
 
@@ -77,7 +72,7 @@ const sectorDelete = async (req, res) => {
 
     return res.json({ message: 'success' });
   } catch (error) {
-    return res.status(400).json({ message: 'failure' });
+    return res.status(400).json({ error: error });
   }
 };
 
@@ -85,24 +80,39 @@ const sectorDeactivate = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, {
-      status: 'desativado',
-      updatedAt: moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(),
-    }, { new: true }, (sector) => sector);
+    const status = 'desativado';
+    const dateNow = moment.utc(moment.tz('America/Sao_Paulo').format('YYYY-MM-DDTHH:mm:ss')).toDate(); 
+    const sectorInfo = {
+      status: status,
+      updatedAt: dateNow,
+    } 
+    const updateStatus = await Sector.findOneAndUpdate({ _id: id }, { sectorInfo }, { new: true }, (sector) => sector);
     return res.json(updateStatus);
-  } catch {
-    return res.status(400).json({ err: 'invalid id' });
+  } catch (error) {
+    return res.status(400).json({ error: error });
   }
 };
 
-const newestFourSectorsGet = async (req, res) => {
-  const sectors = await Sector.find().limit(4).sort({ createdAt: -1 });
+const newestFourSectorsGet = async (_req, res) => {
+  const limit = 4;  
+  const sortInfo = {
+    createdAt: -1, 
+  }
+  const sectors = await Sector.find().limit(limit).sort(sortInfo);
 
   return res.status(200).json(sectors);
 };
 
-const newestFourActiveSectorsGet = async (req, res) => {
-  const sectors = await Sector.find({ status: "ativado" }).limit(4).sort({ createdAt: -1 });
+const newestFourActiveSectorsGet = async (_req, res) => {
+  const limit = 4; 
+  const status = 'ativado';
+  const sectorInfo = {
+    status: status,
+  }
+  const sortInfo = {
+    createdAt: -1, 
+  }
+  const sectors = await Sector.find(sectorInfo).limit(limit).sort(sortInfo);
 
   return res.status(200).json(sectors);
 };
