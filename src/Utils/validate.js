@@ -1,15 +1,19 @@
-const validate = (name, description) => {
-  const errors = [];
+const { newError, throwAggregateError } = require('.error');
 
+function validateNameDescription(name, description){
+  const errors = [];
   if (!name) {
-    errors.push('invalid name');
+    errors.push(newError('invalid name'));
   }
 
   if (!description) {
-    errors.push('invalid description');
+    errors.push(newError('invalid description'));
   }
 
-  return errors;
+  if (!errors.length){
+    throwAggregateError(errors, 'ValidationError');
+  }
+  
 };
 
-module.exports = { validate };
+module.exports = { validateNameDescription };
