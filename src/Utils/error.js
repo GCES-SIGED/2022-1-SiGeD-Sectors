@@ -1,5 +1,5 @@
 function newError(name) {
-    new Error(name);
+    return new Error(name);
 }
 
 function throwAggregateError(errors, message) {
