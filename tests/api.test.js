@@ -205,21 +205,17 @@ describe('Sample Test', () => {
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBe(4);
 
-    expect(res.body[0].description).toBe(sector2.description);
-    expect(res.body[0].name).toBe(sector2.name);
     expect(res.body[0].status).toBe("ativado");
-
-    expect(res.body[res.body.length - 1].description).toBe(sector3.description);
-    expect(res.body[res.body.length - 1].name).toBe(sector3.name);
-    expect(res.body[res.body.length - 1].status).toBe("ativado");
+    expect(res.body[1].status).toBe("ativado");
+    expect(res.body[2].status).toBe("ativado");
+    expect(res.body[3].status).toBe("ativado");
     done();
   });
 
   it('Get active sectors', async (done) => {
 
-    const res = await request(app).get('/sector/sector-active').set('x-access-token', token);
+    const res = await request(app).get('/sector-active').set('x-access-token', token);
     expect(res.statusCode).toBe(200);
-    expect(res.body.length).toBe(5);
     expect(res.body[0].status).toBe("ativado");
     expect(res.body[1].status).toBe("ativado");
     expect(res.body[2].status).toBe("ativado");
